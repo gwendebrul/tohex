@@ -1,29 +1,26 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This prject contains 2 files written in C to convert decimal or binairy numbers to hexadecimal.
 
-### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### instalation ###
 
-### How do I get set up? ###
+copy the tohex.c and tohex.h to your program's directory and then put
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+        #include "tohex.h"
 
-### Contribution guidelines ###
+into your main file or in the file where you want access the two public functions.
 
-* Writing tests
-* Code review
-* Other guidelines
+### Usage ###
 
-### Who do I talk to? ###
+There are two public functions, one for converting a decimal number to hexadecimal and one to convert a binairy string into hexadecimal.
 
-* Repo owner or admin
-* Other community or team contact
+        char * decimalToHex(int);
+        char * binairToHex(char *);
+
+Example call:
+
+        printf("\ndecimal: %d\t\t\tHex: %s\n",255,decimalToHex(255));
+        printf("binair: %s\t\tHex: %s\t\t%d\n","11111111",binairToHex("11111111"),255);
+
+That's it.
