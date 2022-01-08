@@ -20,7 +20,7 @@ There are two public functions, one for converting a decimal number to hexadecim
 
 Example call:
 
-        printf("\ndecimal: %d\t\t\tHex: %s\n",255,decimalToHex(255));
-        printf("binair: %s\t\tHex: %s\t\t%d\n","11111111",binairToHex("11111111"),255);
+        decimalToHex(255)       ; This returns FF as a string
+        binairToHex("11111111") ; This also returns FF as a string
 
 That's it.
