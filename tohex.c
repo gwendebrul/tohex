@@ -2,14 +2,20 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <ctype.h>
+
 #define HEX_MAX_SIZE 32
 
-static char backwardsHex[HEX_MAX_SIZE];
+static char backwards_hex[HEX_MAX_SIZE];
 static char hex[HEX_MAX_SIZE];
-static char backwardsBinairString[HEX_MAX_SIZE];
+static char backwards_binair_string[HEX_MAX_SIZE];
 
+void ToUpper(char *s) {
+    for (int i = 0; *s; ++s )
+        s[i] = toupper(s[i]);
+}
 
-static void convertToBackwardsHex(int decimal) {
+static void ConvertToBackwardsHex(int decimal) {
     int dividend;
     int divisor = 16;
     int remainder;
@@ -20,55 +26,92 @@ static void convertToBackwardsHex(int decimal) {
     
     while (dividend >= 1) {
         remainder = dividend % divisor;
-        backwardsHex[counter] = hexes[remainder];
+        backwards_hex[counter] = hexes[remainder];
         dividend = dividend / divisor;
         counter++;
     }
 
-   backwardsHex[counter] = '\0';
+   backwards_hex[counter] = '\0';
 }
 
-static void swapBackwardsHex() {
+static void SwapBackwardsHex() {
    int i= 0;
-   int length = (int)strlen(backwardsHex);
+   int length = (int)strlen(backwards_hex);
    for(int index = length-1; index >= 0; index--) {
-        hex[i] = backwardsHex[index];
+        hex[i] = backwards_hex[index];
         i++;
     }
     hex[i] = '\0';
 }
-static int convertBinairToDecimal() {
+static int ConvertBinairToDecimal() {
     int decimal = 0;
-    int length = (int)strlen(backwardsBinairString);
+    int length = (int)strlen(backwards_binair_string);
     
     for (int index = 0; index < length;index++) {
-       if (backwardsBinairString[index] == '1')
+       if (backwards_binair_string[index] == '1')
            decimal += pow(2,index);
     }
     
     return decimal;
 }
 
-static void swapBinairStringToBackwards(char * binairString) {
-    int length = (int)strlen(binairString);
+static void SwapBinairStringToBackwards(char * binair_string) {
+    int length = (int)strlen(binair_string);
     int i = 0;
     for (int index = length-1; index >= 0; index-- ) {
-        backwardsBinairString[i] = binairString[index];
+        backwards_binair_string[i] = binair_string[index];
         i++;
     }
-    backwardsBinairString[i] = '\0';
+    backwards_binair_string[i] = '\0';
 }
-char * decimalToHex(int decimal) {
-    convertToBackwardsHex(decimal);
-    swapBackwardsHex();
+
+static int GetIndexOfHexes(char *hex_character) {
+    char hexes[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+    int i = 0;
+    
+    for (i = 0; i <= 16; i++) {
+        if (hexes[i] == hex_character)
+            return i;
+    }
+    
+    return 0;
+}
+
+static int ConvertHexToDecimalString(char *hex_string) {
+    int length = (int)strlen(hex_string);
+    ToUpper(hex_string);
+    int i = 0;
+    int decimal = 0;
+    int hex_value = 0;
+    
+    for (int index = length-1; index >= 0; index--) {
+        hex_value = GetIndexOfHexes(hex_string[index]);
+        decimal += hex_value * pow(16, i);
+        i++;
+    }
+    
+    return decimal;
+}
+
+char * gdb_DecimalToHex(int decimal) {
+    ConvertToBackwardsHex(decimal);
+    SwapBackwardsHex();
 
     return hex;
 }
 
-char * binairToHex(char *binairString) {
-    swapBinairStringToBackwards(binairString);
-    int decimal = convertBinairToDecimal(backwardsBinairString);
-    decimalToHex(decimal);
+char * gdb_BinairToHex(char *binair_string) {
+    SwapBinairStringToBackwards(binair_string);
+    int decimal = ConvertBinairToDecimal(backwards_binair_string);
+    gdb_DecimalToHex(decimal);
     
     return hex;
+}
+
+int gdb_HexToDecimal(char *hex_string) {
+     char hex[strlen(hex_string)];
+     strncpy(&hex, hex_string, strlen(hex));
+     int decimal = ConvertHexToDecimalString(hex);
+    
+    return decimal;
 }
