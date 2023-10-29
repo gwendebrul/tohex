@@ -1,6 +1,6 @@
 # README #
 
-This prject contains 2 files written in C to convert decimal or binairy numbers to hexadecimal.
+This project contains 2 files written in C to convert decimal or binairy numbers to hexadecimal.
 
 
 ### instalation ###
