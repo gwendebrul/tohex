@@ -10,7 +10,7 @@ static char backwards_hex[HEX_MAX_SIZE];
 static char hex[HEX_MAX_SIZE];
 static char backwards_binair_string[HEX_MAX_SIZE];
 
-void ToUpper(char *s) {
+static void ToUpper(char *s) {
     for (int i = 0; *s; ++s )
         s[i] = toupper(s[i]);
 }
@@ -34,7 +34,7 @@ static void ConvertToBackwardsHex(int decimal) {
    backwards_hex[counter] = '\0';
 }
 
-static void SwapBackwardsHex() {
+static void SwapBackwardsHex(void) {
    int i= 0;
    int length = (int)strlen(backwards_hex);
    for(int index = length-1; index >= 0; index--) {
@@ -43,7 +43,7 @@ static void SwapBackwardsHex() {
     }
     hex[i] = '\0';
 }
-static int ConvertBinairToDecimal() {
+static int ConvertBinairToDecimal(void) {
     int decimal = 0;
     int length = (int)strlen(backwards_binair_string);
     
@@ -70,7 +70,7 @@ static int GetIndexOfHexes(char *hex_character) {
     int i = 0;
     
     for (i = 0; i <= 16; i++) {
-        if (hexes[i] == hex_character)
+        if (hexes[i] == *hex_character)
             return i;
     }
     
@@ -85,7 +85,7 @@ static int ConvertHexToDecimalString(char *hex_string) {
     int hex_value = 0;
     
     for (int index = length-1; index >= 0; index--) {
-        hex_value = GetIndexOfHexes(hex_string[index]);
+        hex_value = GetIndexOfHexes(&hex_string[index]);
         decimal += hex_value * pow(16, i);
         i++;
     }
@@ -102,15 +102,18 @@ char * gdb_DecimalToHex(int decimal) {
 
 char * gdb_BinairToHex(char *binair_string) {
     SwapBinairStringToBackwards(binair_string);
-    int decimal = ConvertBinairToDecimal(backwards_binair_string);
+    int decimal = ConvertBinairToDecimal();
     gdb_DecimalToHex(decimal);
     
     return hex;
 }
 
 int gdb_HexToDecimal(char *hex_string) {
+     // In windows Visual Studio strlen must be replaced with sizeof
      char hex[strlen(hex_string)];
-     strncpy(&hex, hex_string, strlen(hex));
+     // In windows Visual Studio strncpy must be replaced with strncpy_s
+     //strncpy_s(hex, sizeof(char*), hex_string, strlen(hex_string));
+     strncpy(hex, hex_string, strlen(hex));
      int decimal = ConvertHexToDecimalString(hex);
     
     return decimal;
