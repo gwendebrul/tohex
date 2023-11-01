@@ -6,6 +6,11 @@
 
 #define HEX_MAX_SIZE 32
 
+// If this code must be compiled on Windows Visual Studio then change the value to 1
+#ifndef VISUAL_STUDIO
+#define VISUAL_STUDIO 0
+#endif
+
 static char backwards_hex[HEX_MAX_SIZE];
 static char hex[HEX_MAX_SIZE];
 static char backwards_binair_string[HEX_MAX_SIZE];
@@ -109,11 +114,14 @@ char * gdb_BinairToHex(char *binair_string) {
 }
 
 int gdb_HexToDecimal(char *hex_string) {
-     // In windows Visual Studio strlen must be replaced with sizeof
-     char hex[strlen(hex_string)];
-     // In windows Visual Studio strncpy must be replaced with strncpy_s
-     //strncpy_s(hex, sizeof(char*), hex_string, strlen(hex_string));
-     strncpy(hex, hex_string, strlen(hex));
+// if compiled for macos the execute this bit else if VISUAL_STUDIO value is 1 then compile for windows
+#if VISUAL_STUDIO == 0
+    char hex[strlen(hex_string)];
+    strncpy(hex, hex_string, strlen(hex));
+#elif VISUAL_STUDIO == 1
+    char hex[sizeof(hex_string)];
+    strncpy_s(hex, sizeof(char*), hex_string, strlen(hex_string));
+#endif
      int decimal = ConvertHexToDecimalString(hex);
     
     return decimal;
