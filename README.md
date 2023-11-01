@@ -26,6 +26,10 @@ Example call:
 		gdb_HexToDecimal("ac")	   ; This returns 172
 		  
 
-This code is tested on XCode on macos, for windows Visual Studio you should fix two errors. The fix is documented in the tohex.c file.
+This code is tested on XCode on macos, for windows Visual Studio you should fix two errors by setting the 
+	
+		#define VISUAL_STUDIO 1
+
+at the top of **tohex.c** file.
 
 That's it.
