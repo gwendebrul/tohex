@@ -26,7 +26,7 @@ Example call:
 		gdb_HexToDecimal("ac")	   ; This returns 172
 		  
 
-This code is tested on XCode on macos, for windows Visual Studio you should fix two errors by setting the 
+This code is tested on XCode on macos and openSUSE 15.4 (KDevelop), for windows Visual Studio you should fix two errors by setting the 
 	
 		#define VISUAL_STUDIO 1
 
